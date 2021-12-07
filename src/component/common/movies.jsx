@@ -8,9 +8,19 @@ class Movies extends Component {
     const movies = this.state.movies.filter((m) => m._id !== movie._id);
     this.setState({ movies });
   };
+  handleLike = (movie) => {
+    const movies = [...this.state.movies];
+    const indexMovie = movies.indexOf(movie);
+    movies[indexMovie] = { ...movies[indexMovie] };
+    movies[indexMovie].like = !movies[indexMovie].like;
+    this.setState({ movies });
+  };
   render() {
+    const { length: count } = this.state.movies;
+    if (count === 0) return <p>There is no data</p>;
     return (
       <React.Fragment>
+        <p>Showing {count} movies</p>
         <div>
           <table className="table">
             <thead>
@@ -31,7 +41,10 @@ class Movies extends Component {
                   <td>{movie.numberInStock}</td>
                   <td>{movie.dailyRentalRate}</td>
                   <td>
-                    <Like />
+                    <Like
+                      liked={movie.like}
+                      likeToggle={() => this.handleLike(movie)}
+                    />
                   </td>
                   <td>
                     <button
